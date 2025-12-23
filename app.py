@@ -28,7 +28,7 @@ s3_client = boto3.client(
 def index():
     response = requests.get(API_URL)
     users = response.json()
-    return render_template("index.html", users=users, s3_bucket=f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/")
+    return render_template("index.html", users=users, s3_bucket=f"https://{S3_BUCKET}.s3-{AWS_REGION}.amazonaws.com")
 
 @app.route("/users", methods=["POST"])
 def add_user():
@@ -51,7 +51,7 @@ def add_user():
     if image:
         image_filename = f"users/{image.filename}"
         try:
-            s3_client.upload_fileobj(image, S3_BUCKET, image_filename)
+            s3_client.upload_fileobj(image, S3_BUCKET, image_filename, ExtraArgs={'ACL': 'public-read'})
             image_url = f"https://{S3_BUCKET}.s3-{AWS_REGION}.amazonaws.com/{image_filename}"
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -102,4 +102,4 @@ def update_user(user_id):
         return jsonify({"error": "Failed to update user"}), response.status_code
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=8000)
