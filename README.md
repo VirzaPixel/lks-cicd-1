@@ -12,6 +12,8 @@ S3_BUCKET_NAME=your bucket name<br/>
 API_GATEWAY_URL=your API Gateway URL<br/>
 ECR_REPOSITORY=your name ECR<br/>
 ECR_REGISTRY=your url image
+EB_ENV_NAME
+EB_APP_NAME
 
 
 ## Running Apps
